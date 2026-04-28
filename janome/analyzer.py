@@ -104,9 +104,4 @@ class Analyzer(object):
         :return: token generator. emitted element type depends on the output of the last TokenFilter.
                  (e.g., ExtractAttributeFilter emits strings.)
         """
-        for cfilter in self.char_filters:
-            text = cfilter(text)
-        tokens = self.tokenizer.tokenize(text, wakati=False)
-        for tfilter in self.token_filters:
-            tokens = tfilter(tokens)  # type: ignore
-        return tokens
+        pass

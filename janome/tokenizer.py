@@ -211,105 +211,25 @@ class Tokenizer(object):
 
         :return: generator yielding tokens (wakati=False) or generator yielding string (wakati=True)
         """
-        if self.wakati:
-            wakati = True
-        if dotfile and len(text) < Tokenizer.MAX_CHUNK_SIZE:
-            return self.__tokenize_stream(text, wakati, baseform_unk, dotfile)
-        else:
-            return self.__tokenize_stream(text, wakati, baseform_unk, '')
+        pass
 
     def __tokenize_stream(self, text, wakati, baseform_unk, dotfile):
-        text = text.strip()
-        text_length = len(text)
-        processed = 0
-        while processed < text_length:
-            tokens, pos = self.__tokenize_partial(text[processed:], wakati, baseform_unk, dotfile)
-            for token in tokens:
-                yield token
-            processed += pos
+        pass
 
     def __tokenize_partial(self, text, wakati, baseform_unk, dotfile):
-        if self.wakati and not wakati:
-            raise WakatiModeOnlyException
-
-        chunk_size = min(len(text), Tokenizer.MAX_CHUNK_SIZE)
-        lattice = Lattice(chunk_size, self.sys_dic)
-        pos = 0
-        while not self.__should_split(text, pos):
-            encoded_partial_text = text[pos:pos + min(50, chunk_size - pos)].encode('utf-8')
-            # user dictionary
-            if self.user_dic:
-                entries = self.user_dic.lookup(encoded_partial_text)
-                for e in entries:
-                    lattice.add(SurfaceNode(e, NodeType.USER_DICT))
-                matched = len(entries) > 0
-
-            # system dictionary
-            entries = self.sys_dic.lookup(encoded_partial_text, self.matcher)
-            for e in entries:
-                lattice.add(SurfaceNode(e, NodeType.SYS_DICT))
-            matched = len(entries) > 0
-
-            # unknown
-            cates = self.sys_dic.get_char_categories(text[pos])
-            if cates:
-                for cate in cates:
-                    if matched and not self.sys_dic.unknown_invoked_always(cate):
-                        continue
-                    # unknown word length
-                    length = self.sys_dic.unknown_length(cate) \
-                        if not self.sys_dic.unknown_grouping(cate) else self.max_unknown_length
-                    assert length >= 0
-                    # buffer for unknown word
-                    buf = text[pos]
-                    for p in range(pos + 1, min(chunk_size, pos + length + 1)):
-                        _cates = self.sys_dic.get_char_categories(text[p])
-                        if cate in _cates or any(cate in _compat_cates for _compat_cates in _cates.values()):
-                            buf += text[p]
-                        else:
-                            break
-                    unknown_entries = self.sys_dic.unknowns.get(cate)
-                    assert unknown_entries
-                    for entry in unknown_entries:
-                        left_id, right_id, cost, part_of_speech = entry
-                        base_form = buf if baseform_unk else '*'
-                        dummy_dict_entry = (buf, left_id, right_id, cost, part_of_speech, '*', '*', base_form, '*', '*')
-                        lattice.add(Node(dummy_dict_entry, NodeType.UNKNOWN))
-
-            pos += lattice.forward()
-        lattice.end()
-        min_cost_path = lattice.backward()
-        assert isinstance(min_cost_path[0], BOS)
-        assert isinstance(min_cost_path[-1], EOS)
-        if wakati:
-            tokens = [node.surface for node in min_cost_path[1:-1]]
-        else:
-            tokens = []
-            for node in min_cost_path[1:-1]:
-                if type(node) is SurfaceNode and node.node_type is NodeType.SYS_DICT:
-                    tokens.append(Token(node, self.sys_dic.lookup_extra(node.num)))
-                elif type(node) is SurfaceNode and node.node_type is NodeType.USER_DICT:
-                    tokens.append(Token(node, self.user_dic.lookup_extra(node.num)))
-                else:
-                    tokens.append(Token(node))
-        if dotfile:
-            lattice.generate_dotfile(filename=dotfile)
-        return (tokens, pos)
+        pass
 
     def __should_split(self, text, pos):
-        return \
-            pos >= len(text) or \
-            pos >= Tokenizer.MAX_CHUNK_SIZE or \
-            (pos >= Tokenizer.CHUNK_SIZE and self.__splittable(text[:pos]))
+        pass
 
     def __splittable(self, text):
-        return self.__is_punct(text[-1]) or self.__is_newline(text)
+        pass
 
     def __is_punct(self, c):
-        return c == u'、' or c == u'。' or c == u',' or c == u'.' or c == u'？' or c == u'?' or c == u'！' or c == u'!'
+        pass
 
     def __is_newline(self, text):
-        return text.endswith('\n\n') or text.endswith('\r\n\r\n')
+        pass
 
 
 class WakatiModeOnlyException(Exception):

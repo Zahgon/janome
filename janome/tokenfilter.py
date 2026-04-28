@@ -45,10 +45,7 @@ class LowerCaseFilter(TokenFilter):
     """
 
     def apply(self, tokens: Iterator[Token]) -> Iterator[Token]:
-        for token in tokens:
-            token.surface = token.surface.lower()
-            token.base_form = token.base_form.lower()
-            yield token
+        pass
 
 
 class UpperCaseFilter(TokenFilter):
@@ -59,10 +56,7 @@ class UpperCaseFilter(TokenFilter):
     """
 
     def apply(self, tokens: Iterator[Token]) -> Iterator[Token]:
-        for token in tokens:
-            token.surface = token.surface.upper()
-            token.base_form = token.base_form.upper()
-            yield token
+        pass
 
 
 class POSStopFilter(TokenFilter):
@@ -85,10 +79,7 @@ class POSStopFilter(TokenFilter):
         self.pos_list = pos_list
 
     def apply(self, tokens: Iterator[Token]) -> Iterator[Token]:
-        for token in tokens:
-            if any(token.part_of_speech.startswith(pos) for pos in self.pos_list):
-                continue
-            yield token
+        pass
 
 
 class POSKeepFilter(TokenFilter):
@@ -111,9 +102,7 @@ class POSKeepFilter(TokenFilter):
         self.pos_list = pos_list
 
     def apply(self, tokens: Iterator[Token]) -> Iterator[Token]:
-        for token in tokens:
-            if any(token.part_of_speech.startswith(pos) for pos in self.pos_list):
-                yield token
+        pass
 
 
 class CompoundNounFilter(TokenFilter):
@@ -128,23 +117,7 @@ class CompoundNounFilter(TokenFilter):
     """
 
     def apply(self, tokens: Iterator[Token]) -> Iterator[Token]:
-        _ret = None
-        for token in tokens:
-            if _ret:
-                if token.part_of_speech.startswith('名詞') and _ret.part_of_speech.startswith('名詞'):
-                    _ret.surface += token.surface
-                    _ret.part_of_speech = '名詞,複合,*,*'
-                    _ret.base_form += token.base_form
-                    _ret.reading += token.reading
-                    _ret.phonetic += token.phonetic
-                else:
-                    ret = _ret
-                    _ret = token
-                    yield ret
-            else:
-                _ret = token
-        if _ret:
-            yield _ret
+        pass
 
 
 class ExtractAttributeFilter(TokenFilter):
@@ -168,8 +141,7 @@ class ExtractAttributeFilter(TokenFilter):
         self.att = att
 
     def apply(self, tokens: Iterator[Token]) -> Iterator[str]:
-        for token in tokens:
-            yield getattr(token, self.att)
+        pass
 
 
 class TokenCountFilter(TokenFilter):
@@ -199,10 +171,4 @@ class TokenCountFilter(TokenFilter):
         self.sorted = sorted
 
     def apply(self, tokens: Iterator[Token]) -> Iterator[Tuple[str, int]]:
-        token_counts: Dict[str, int] = defaultdict(int)
-        for token in tokens:
-            token_counts[getattr(token, self.att)] += 1
-        if self.sorted:
-            return ((k, v) for k, v in sorted(token_counts.items(), key=lambda x: x[1], reverse=True))
-        else:
-            return ((k, v) for k, v in token_counts.items())
+        pass

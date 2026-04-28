@@ -53,7 +53,7 @@ class RegexReplaceCharFilter(CharFilter):
         self.replacement = repl
 
     def apply(self, text: str) -> str:
-        return re.sub(self.pattern, self.replacement, text)
+        pass
 
 
 class UnicodeNormalizeCharFilter(CharFilter):
@@ -75,4 +75,4 @@ class UnicodeNormalizeCharFilter(CharFilter):
         self.form = form
 
     def apply(self, text: str) -> str:
-        return unicodedata.normalize(self.form, text)
+        pass

@@ -28,11 +28,7 @@ class SystemDictionary(RAMDictionary, UnknownsDictionary):
 
     @classmethod
     def instance(cls):
-        if not cls.__INSTANCE:
-            with cls.__lock:
-                if not cls.__INSTANCE:
-                    cls.__INSTANCE = SystemDictionary(entries(), connections, chardef.DATA, unknowns.DATA)
-        return cls.__INSTANCE
+        pass
 
     def __init__(self, entries, connections, chardefs, unknowns):
         RAMDictionary.__init__(self, entries, connections)
@@ -49,11 +45,7 @@ class MMapSystemDictionary(MMapDictionary, UnknownsDictionary):
 
     @classmethod
     def instance(cls):
-        if not cls.__INSTANCE:
-            with cls.__lock:
-                if not cls.__INSTANCE:
-                    cls.__INSTANCE = MMapSystemDictionary(mmap_entries(), connections, chardef.DATA, unknowns.DATA)
-        return cls.__INSTANCE
+        pass
 
     def __init__(self, mmap_entries, connections, chardefs, unknowns):
         MMapDictionary.__init__(self, mmap_entries[0], mmap_entries[1], mmap_entries[2], connections)

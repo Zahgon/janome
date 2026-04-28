@@ -49,24 +49,13 @@ class SimpleProgressIndicator(ProgressHandler):
         self.desc = None
 
     def print_progress(self, terminator=''):
-        logger.handlers[0].terminator = terminator
-        logger.info(self.format.format(
-            self.desc,
-            self.value * 100 / self.total,
-            self.value,
-            self.total))
+        pass
 
     def on_start(self, total, value=0, desc=None):
-        self.total = total
-        self.value = value
-        self.desc = desc or 'Processing'
+        pass
 
     def on_progress(self, value=1):
-        self.value += value
-
-        if float.is_integer(self.value * self.update_frequency):
-            self.print_progress()
+        pass
 
     def on_complete(self):
-        self.print_progress('\n')
-        self.total = self.value = self.desc = None
+        pass
